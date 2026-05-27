@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Karthik | INFOFEST Dashboard</title>
+
+<!-- GOOGLE FONTS -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&family=Bonheur+Royale&family=Eagle+Lake&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Lavishly+Yours&display=swap" rel="stylesheet">
+
+<!-- PDF -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Josefin Sans", sans-serif;
+}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#020617,#0f172a,#111827);
+  overflow-x:hidden;
+  color:white;
+}
+
+/* BACKGROUND */
+
+.blur1{
+  position:fixed;
+  width:500px;
+  height:500px;
+  background:#ff005555;
+  border-radius:50%;
+  filter:blur(120px);
+  top:-150px;
+  right:-100px;
+}
+
+.blur2{
+  position:fixed;
+  width:450px;
+  height:450px;
+  background:#0066ff55;
+  border-radius:50%;
+  filter:blur(120px);
+  bottom:-120px;
+  left:-100px;
+}
+
+.container{
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:1500px;
+  margin:auto;
+  padding:30px;
+}
+
+/* TOPBAR */
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
+.logo h1{
+  font-family:"Lavishly Yours", cursive;
+  font-size:90px;
+  line-height:1;
+}
+
+.logo p{
+  margin-top:10px;
+  color:#cbd5e1;
+  font-size:18px;
+}
+
+/* WHATSAPP */
+
+.social-card{
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.1);
+  backdrop-filter:blur(10px);
+  padding:16px 24px;
+  border-radius:20px;
+  color:white;
+  text-decoration:none;
+  transition:0.3s;
+}
+
+.social-card:hover{
+  transform:translateY(-3px);
+}
+
+/* MAIN */
+
+.main{
+  display:grid;
+  grid-template-columns:450px 1fr;
+  gap:25px;
+}
+
+/* GLASS */
+
+.glass{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  backdrop-filter:blur(12px);
+  border-radius:30px;
+  padding:25px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.3);
+}
+
+.glass h2{
+  margin-bottom:20px;
+  font-size:30px;
+}
+
+/* TYPE BUTTONS */
+
+.type-buttons{
+  display:flex;
+  gap:10px;
+  margin-bottom:25px;
+  flex-wrap:wrap;
+}
+
+.type-btn{
+
+  flex:1;
+  min-width:120px;
+
+  padding:15px;
+
+  border:none;
+  border-radius:16px;
+
+  background:rgba(255,255,255,0.08);
+
+  color:white;
+
+  cursor:pointer;
+
+  transition:0.3s;
+
+}
+
+.type-btn.active{
+  background:linear-gradient(
+    90deg,
+    #ff0055,
+    #ff3366
+  );
+}
+
+.type-btn:hover{
+  transform:translateY(-2px);
+}
+
+/* INPUTS */
+
+.input-group{
+  margin-bottom:20px;
+}
+
+.input-group label{
+  display:block;
+  margin-bottom:8px;
+  color:#e2e8f0;
+}
+
+.input-group input,
+.input-group textarea{
+
+  width:100%;
+  border:none;
+  outline:none;
+
+  padding:16px;
+
+  border-radius:18px;
+
+  background:rgba(255,255,255,0.08);
+
+  color:white;
+
+  font-size:16px;
+
+}
+
+.input-group textarea{
+  resize:none;
+  min-height:140px;
+}
+
+/* BUTTONS */
+
+.btns{
+  display:flex;
+  gap:15px;
+  margin-top:20px;
+}
+
+.action-btn{
+
+  flex:1;
+
+  padding:16px;
+
+  border:none;
+  border-radius:18px;
+
+  color:white;
+
+  font-size:16px;
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:0.3s;
+
+}
+
+.generate-btn{
+  background:linear-gradient(
+    90deg,
+    #ff0055,
+    #ff3366
+  );
+}
+
+.download-btn{
+  background:linear-gradient(
+    90deg,
+    #0066ff,
+    #00aaff
+  );
+}
+
+.action-btn:hover{
+  transform:translateY(-3px);
+}
+
+/* PREVIEW */
+
+.preview{
+  background:white;
+  border-radius:25px;
+  overflow:auto;
+  padding:15px;
+}
+
+canvas{
+  width:100%;
+  display:block;
+  border-radius:20px;
+}
+
+/* CARD SECTION */
+
+.cards{
+  margin-top:25px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.card{
+
+  background:rgba(255,255,255,0.06);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  border-radius:25px;
+
+  overflow:hidden;
+
+  transition:0.3s;
+
+}
+
+.card:hover{
+  transform:translateY(-5px);
+}
+
+.card img{
+  width:100%;
+  display:block;
+}
+
+.card-content{
+  padding:18px;
+}
+
+.card-content h3{
+  margin-bottom:10px;
+}
+
+.card-content p{
+  color:#cbd5e1;
+  font-size:14px;
+}
+
+/* MOBILE */
+
+@media(max-width:1100px){
+
+  .main{
+    grid-template-columns:1fr;
+  }
+
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:768px){
+
+  .logo h1{
+    font-size:70px;
+  }
+
+  .container{
+    padding:20px;
+  }
+
+  .btns{
+    flex-direction:column;
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="blur1"></div>
+<div class="blur2"></div>
+
+<div class="container">
+
+<!-- TOPBAR -->
+
+<div class="topbar">
+
+<div class="logo">
+
+<h1>Karthik</h1>
+
+<p>
+INFOFEST 2026 Certificate Generator Dashboard
+</p>
+
+</div>
+
+<a
+href="https://wa.link/0x2hr5"
+target="_blank"
+class="social-card">
+
+Chat on WhatsApp
+
+</a>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<!-- LEFT -->
+
+<div class="glass">
+
+<h2>Generate Certificate</h2>
+
+<!-- TYPE BUTTONS -->
+
+<div class="type-buttons">
+
+<button
+class="type-btn active"
+onclick="selectType('participant',this)">
+
+👤 Participation
+
+</button>
+
+<button
+class="type-btn"
+onclick="selectType('achievement',this)">
+
+🏆 Guest
+
+</button>
+
+<button
+class="type-btn"
+onclick="selectType('session',this)">
+
+🎓 Session Chair
+
+</button>
+
+</div>
+
+<!-- PARTICIPANT -->
+
+<div
+id="participantSection"
+class="form-section">
+
+<div class="input-group">
+
+<label>
+Participant Name
+</label>
+
+<input
+type="text"
+id="participantName"
+placeholder="Enter participant name">
+
+</div>
+
+<div class="input-group">
+
+<label>
+Research Paper Title
+</label>
+
+<textarea
+id="participantTitle"
+placeholder="Enter paper title"></textarea>
+
+</div>
+
+</div>
+
+<!-- GUEST -->
+
+<div
+id="achievementSection"
+class="form-section"
+style="display:none;">
+
+<div class="input-group">
+
+<label>
+Guest Name
+</label>
+
+<input
+type="text"
+id="achievementName"
+placeholder="Enter guest name">
+
+</div>
+
+<div class="input-group">
+
+<label>
+Achievement Details
+</label>
+
+<textarea
+id="achievementTitle"
+placeholder="Enter achievement"></textarea>
+
+</div>
+
+</div>
+
+<!-- SESSION -->
+
+<div
+id="sessionSection"
+class="form-section"
+style="display:none;">
+
+<div class="input-group">
+
+<label>
+Session Chair Name
+</label>
+
+<input
+type="text"
+id="sessionName"
+placeholder="Enter session chair name">
+
+</div>
+
+<div class="input-group">
+
+<label>
+Session Details
+</label>
+
+<textarea
+id="sessionTitle"
+placeholder="Enter session details"></textarea>
+
+</div>
+
+</div>
+
+<!-- BUTTONS -->
+
+<div class="btns">
+
+<button
+class="action-btn generate-btn"
+onclick="generateCertificate()">
+
+Generate Preview
+
+</button>
+
+<button
+class="action-btn download-btn"
+onclick="downloadPDF()">
+
+Download PDF
+
+</button>
+
+</div>
+
+</div>
+
+<!-- RIGHT -->
+
+<div class="glass">
+
+<h2>Certificate Preview</h2>
+
+<div class="preview">
+
+<canvas
+id="certificateCanvas"
+width="1462"
+height="1037">
+</canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- CARDS -->
+
+<div class="cards">
+
+<div class="card">
+
+<img src="infofest26 Certificate4.png">
+
+<div class="card-content">
+
+<h3>Participation Certificate</h3>
+
+<p>
+For paper presenters and participants.
+</p>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<img src="Copy of infofest26 achiev Certificate.png">
+
+<div class="card-content">
+
+<h3>Guest Certificate</h3>
+
+<p>
+For guests and award recognition.
+</p>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<img src="sessionchair.png">
+
+<div class="card-content">
+
+<h3>Session Chair Certificate</h3>
+
+<p>
+For session chairs and moderators.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const canvas =
+document.getElementById(
+'certificateCanvas'
+);
+
+const ctx =
+canvas.getContext('2d');
+
+const template =
+new Image();
+
+let currentType =
+'participant';
+
+const certificateImages = {
+
+participant:
+'infofest26 Certificate4.png',
+
+achievement:
+'Copy of infofest26 achiev Certificate.png',
+
+session:
+'sessionchair.png'
+
+};
+
+/* DEFAULT */
+
+template.src =
+certificateImages.participant;
+
+template.onload = () => {
+
+drawCertificate(
+'',
+'',
+'participant'
+);
+
+};
+
+/* SELECT TYPE */
+
+function selectType(
+type,
+button
+){
+
+currentType = type;
+
+document
+.querySelectorAll('.type-btn')
+.forEach(btn => {
+
+btn.classList.remove(
+'active'
+);
+
+});
+
+button.classList.add(
+'active'
+);
+
+document.getElementById(
+'participantSection'
+).style.display = 'none';
+
+document.getElementById(
+'achievementSection'
+).style.display = 'none';
+
+document.getElementById(
+'sessionSection'
+).style.display = 'none';
+
+if(type === 'participant'){
+
+document.getElementById(
+'participantSection'
+).style.display = 'block';
+
+}
+
+else if(type === 'achievement'){
+
+document.getElementById(
+'achievementSection'
+).style.display = 'block';
+
+}
+
+else if(type === 'session'){
+
+document.getElementById(
+'sessionSection'
+).style.display = 'block';
+
+}
+
+}
+
+/* WRAP TEXT */
+
+function wrapText(
+context,
+text,
+x,
+y,
+maxWidth,
+lineHeight
+){
+
+const words =
+text.split(' ');
+
+let line = '';
+
+let lines = [];
+
+for(
+let n = 0;
+n < words.length;
+n++
+){
+
+const testLine =
+line + words[n] + ' ';
+
+const metrics =
+context.measureText(
+testLine
+);
+
+const testWidth =
+metrics.width;
+
+if(
+testWidth > maxWidth
+&& n > 0
+){
+
+lines.push(line);
+
+line =
+words[n] + ' ';
+
+}else{
+
+line = testLine;
+
+}
+
+}
+
+lines.push(line);
+
+for(
+let i = 0;
+i < lines.length;
+i++
+){
+
+context.fillText(
+
+lines[i],
+
+x,
+
+y + (
+i * lineHeight
+)
+
+);
+
+}
+
+}
+
+/* DRAW */
+
+function drawCertificate(
+name,
+title,
+type
+){
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+ctx.drawImage(
+template,
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+ctx.textAlign =
+'center';
+
+ctx.fillStyle =
+'#111';
+
+/* NAME */
+
+ctx.font =
+'68px Bonheur Royale';
+
+ctx.fillText(
+
+name,
+
+canvas.width / 2,
+
+455
+
+);
+
+/* TITLE */
+
+ctx.font =
+'40px Bonheur Royale';
+
+wrapText(
+
+ctx,
+
+title,
+
+canvas.width / 2,
+
+565,
+
+900,
+
+42
+
+);
+
+}
+
+/* GENERATE */
+
+function generateCertificate(){
+
+let name = '';
+let title = '';
+
+if(currentType === 'participant'){
+
+name =
+document.getElementById(
+'participantName'
+).value;
+
+title =
+document.getElementById(
+'participantTitle'
+).value;
+
+}
+
+else if(currentType === 'achievement'){
+
+name =
+document.getElementById(
+'achievementName'
+).value;
+
+title =
+document.getElementById(
+'achievementTitle'
+).value;
+
+}
+
+else if(currentType === 'session'){
+
+name =
+document.getElementById(
+'sessionName'
+).value;
+
+title =
+document.getElementById(
+'sessionTitle'
+).value;
+
+}
+
+template.src =
+certificateImages[currentType];
+
+template.onload = () => {
+
+drawCertificate(
+
+name,
+
+title,
+
+currentType
+
+);
+
+};
+
+}
+
+/* DOWNLOAD */
+
+async function downloadPDF(){
+
+const { jsPDF } =
+window.jspdf;
+
+const pdf =
+new jsPDF({
+
+orientation:
+'landscape',
+
+unit:'px',
+
+format:[
+canvas.width,
+canvas.height
+]
+
+});
+
+const imageData =
+
+canvas.toDataURL(
+'image/png'
+);
+
+pdf.addImage(
+
+imageData,
+
+'PNG',
+
+0,
+
+0,
+
+canvas.width,
+
+canvas.height
+
+);
+
+pdf.save(
+'certificate.pdf'
+);
+
+}
+
+</script>
+
+</body>
+</html>
