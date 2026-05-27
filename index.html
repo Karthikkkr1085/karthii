@@ -591,7 +591,7 @@ For paper presenters and participants.
 
 <div class="card">
 
-<img src="Copy of infofest26 achiev Certificate.png">
+<img src="guestCertificate.png">
 
 <div class="card-content">
 
@@ -647,7 +647,7 @@ participant:
 'infofest26 Certificate4.png',
 
 achievement:
-'Copy of infofest26 achiev Certificate.png',
+'guestCertificate.png',
 
 session:
 'sessionchair.png'
@@ -808,7 +808,6 @@ i * lineHeight
 }
 
 /* DRAW */
-
 function drawCertificate(
 name,
 title,
@@ -833,7 +832,11 @@ canvas.height
 ctx.textAlign =
 'center';
 
-/* NAME FONT */
+/* PARTICIPATION */
+
+if(type === 'participant'){
+
+/* NAME */
 
 ctx.font =
 '72px Bonheur Royale';
@@ -851,7 +854,7 @@ canvas.width / 2,
 
 );
 
-/* TITLE FONT */
+/* TITLE */
 
 ctx.font =
 '42px Bonheur Royale';
@@ -867,7 +870,7 @@ title,
 
 canvas.width / 2,
 
-555,
+540,
 
 900,
 
@@ -877,6 +880,103 @@ canvas.width / 2,
 
 }
 
+/* GUEST */
+
+else if(type === 'achievement'){
+
+/* NAME */
+
+ctx.font =
+'76px Bonheur Royale';
+
+ctx.fillStyle =
+'#111';
+
+ctx.fillText(
+
+name,
+
+canvas.width / 2,
+
+470
+
+);
+
+/* TITLE */
+
+ctx.font =
+'60px Bonheur Royale';
+
+ctx.fillStyle =
+'#8b0000';
+
+wrapText(
+
+ctx,
+
+title,
+
+canvas.width / 2,
+
+575,
+
+880,
+
+42
+
+);
+
+}
+
+/* SESSION CHAIR */
+
+else if(type === 'session'){
+
+/* NAME */
+
+ctx.font =
+'72px Bonheur Royale';
+
+ctx.fillStyle =
+'#111';
+
+ctx.fillText(
+
+name,
+
+canvas.width / 2,
+
+465
+
+);
+
+/* TITLE */
+
+ctx.font =
+'38px Bonheur Royale';
+
+ctx.fillStyle =
+'#8b0000';
+
+wrapText(
+
+ctx,
+
+title,
+
+canvas.width / 2,
+
+560,
+
+860,
+
+40
+
+);
+
+}
+
+}
 /* GENERATE */
 
 function generateCertificate(){
